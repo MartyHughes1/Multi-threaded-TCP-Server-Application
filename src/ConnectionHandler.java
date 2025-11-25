@@ -32,6 +32,26 @@ public class ConnectionHandler extends Thread {
 		}
 		
 		///Insert the Server Conversation......
+		
+		try {
+		    while (true) {
+		        message = (String) in.readObject();
+
+		        if (message == null) break;
+
+		        System.out.println("client> " + message);
+
+		        if (message.startsWith("REGISTER")) {
+		        	//handles each message, and adds to user list
+		            handleRegister(message);
+		        } else {
+		            sendMessage("ERROR: Unknown command");
+		        }
+		    }
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
 	
 		//4: Closing connection
 		try
@@ -57,5 +77,46 @@ public class ConnectionHandler extends Thread {
 		ioException.printStackTrace();
 	}
 	}
+	
+	//Method to deal with user inputs
+	private void handleRegister(String msg) {
+	    // Format:
+	    // REGISTER|name|studentId|email|password|department|role
+
+	    String[] parts = msg.split("\\|");
+
+	    if (parts.length != 7) {
+	        sendMessage("ERROR: Invalid REGISTER format");
+	        return;
+	    }
+
+	    String name = parts[1];
+	    String studentId = parts[2];
+	    String email = parts[3];
+	    String password = parts[4];
+	    String dept = parts[5];
+	    String role = parts[6];
+
+	    // Check uniqueness
+	    synchronized (Provider.users) {
+	        for (User u : Provider.users) {
+	            if (u.studentId.equals(studentId)) {
+	                sendMessage("ERROR: Student ID already registered");
+	                return;
+	            }
+	            if (u.email.equals(email)) {
+	                sendMessage("ERROR: Email already registered");
+	                return;
+	            }
+	        }
+
+	        // Add new user
+	        User newUser = new User(name, studentId, email, password, dept, role);
+	        Provider.users.add(newUser);
+	    }
+
+	    sendMessage("SUCCESS: Registration completed");
+	}
+
 
 }

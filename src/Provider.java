@@ -1,9 +1,11 @@
 
-
+import java.util.*;
 import java.io.*;
 import java.net.*;
 public class Provider
 {
+	//list of all users
+	public static List<User> users = new ArrayList<>();
 	private ServerSocket providerSocket;
 	private Socket connection = null;
 	

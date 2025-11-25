@@ -27,6 +27,24 @@ public class Requester{
 			
 			
 			///Client Conversation......
+			
+			
+			String choice = "";
+
+			while (true) {
+			    System.out.println("\n--- Library System ---");
+			    System.out.println("1. Register");
+			    System.out.println("2. Exit");
+			    System.out.print("Choose: ");
+			    choice = input.nextLine();
+
+			    if (choice.equals("1")) {
+			        registerUser();
+			    } else if (choice.equals("2")) {
+			        break;
+			    }
+			}
+
 		}
 		catch(UnknownHostException unknownHost){
 			System.err.println("You are trying to connect to an unknown host!");
@@ -57,6 +75,38 @@ public class Requester{
 			ioException.printStackTrace();
 		}
 	}
+	
+	private void registerUser() {
+	    System.out.print("Enter Name: ");
+	    String name = input.nextLine();
+
+	    System.out.print("Enter Student ID: ");
+	    String studentId = input.nextLine();
+
+	    System.out.print("Enter Email: ");
+	    String email = input.nextLine();
+
+	    System.out.print("Enter Password: ");
+	    String password = input.nextLine();
+
+	    System.out.print("Enter Department: ");
+	    String dept = input.nextLine();
+
+	    System.out.print("Enter Role (Student/Librarian): ");
+	    String role = input.nextLine();
+
+	    String msg = "REGISTER|" + name + "|" + studentId + "|" + email + "|" + password + "|" + dept + "|" + role;
+
+	    sendMessage(msg);
+
+	    try {
+	        String response = (String) in.readObject();
+	        System.out.println("server> " + response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 	public static void main(String args[])
 	{
 		Requester client = new Requester();
