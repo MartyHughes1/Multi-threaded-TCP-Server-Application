@@ -36,17 +36,24 @@ public class ConnectionHandler extends Thread {
 		try {
 		    while (true) {
 		        message = (String) in.readObject();
+		        
+		        //splits message, and stores first command, as this is the user choice
+		        String[] parts = message.split("\\|");  
+		        String command = parts[0];              
+
 
 		        if (message == null) break;
 
 		        System.out.println("client> " + message);
 
-		        if (message.startsWith("REGISTER")) {
-		        	//handles each message, and adds to user list
-		            handleRegister(message);
+		        if (command.equalsIgnoreCase("REGISTER")) {
+		            handleRegister(message);         // keep as is
+		        } else if (command.equalsIgnoreCase("LOGIN")) {
+		            handleLogin(parts);             // pass the parts array
 		        } else {
 		            sendMessage("ERROR: Unknown command");
 		        }
+
 		    }
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -117,6 +124,29 @@ public class ConnectionHandler extends Thread {
 
 	    sendMessage("SUCCESS: Registration completed");
 	}
+
+	private void handleLogin(String[] parts) {
+	    // parts[0] = "LOGIN", parts[1] = email, parts[2] = password
+	    if (parts.length != 3) {
+	        sendMessage("ERROR: Invalid LOGIN format");
+	        return;
+	    }
+
+	    String email = parts[1];
+	    String password = parts[2];
+
+	    synchronized (Provider.users) {
+	        for (User u : Provider.users) {
+	            if (u.email.equals(email) && u.password.equals(password)) {
+	                sendMessage("SUCCESS: Logged in as " + u.name + " (" + u.role + ")");
+	                return;
+	            }
+	        }
+	    }
+
+	    sendMessage("ERROR: Invalid email or password");
+	}
+
 
 
 }

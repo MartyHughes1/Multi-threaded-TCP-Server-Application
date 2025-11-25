@@ -34,14 +34,17 @@ public class Requester{
 			while (true) {
 			    System.out.println("\n--- Library System ---");
 			    System.out.println("1. Register");
-			    System.out.println("2. Exit");
+			    System.out.println("2. Login");
+			    System.out.println("3. Exit");
 			    System.out.print("Choose: ");
 			    choice = input.nextLine();
 
 			    if (choice.equals("1")) {
 			        registerUser();
 			    } else if (choice.equals("2")) {
-			        break;
+			        loginUser();     
+			    } else if (choice.equals("3")) {
+			        break;           
 			    }
 			}
 
@@ -106,6 +109,27 @@ public class Requester{
 	        e.printStackTrace();
 	    }
 	}
+	
+	private void loginUser() {
+	    System.out.print("Email: ");
+	    String email = input.nextLine();
+
+	    System.out.print("Password: ");
+	    String password = input.nextLine();
+
+	    // Send login command as one formatted string
+	    sendMessage("LOGIN|" + email + "|" + password);
+
+	    // Read response from server
+	    try {
+	        String response = (String) in.readObject();
+	        System.out.println("server> " + response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+
 
 	public static void main(String args[])
 	{
