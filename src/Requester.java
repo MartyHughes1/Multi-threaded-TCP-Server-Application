@@ -35,7 +35,8 @@ public class Requester{
 			    System.out.println("\n--- Library System ---");
 			    System.out.println("1. Register");
 			    System.out.println("2. Login");
-			    System.out.println("3. Exit");
+			    System.out.println("3. Create Library Record");
+			    System.out.println("4. Exit");
 			    System.out.print("Choose: ");
 			    choice = input.nextLine();
 
@@ -43,7 +44,12 @@ public class Requester{
 			        registerUser();
 			    } else if (choice.equals("2")) {
 			        loginUser();     
-			    } else if (choice.equals("3")) {
+			    } 
+			    else if(choice.equals("3"))
+			     {
+			    	createRecord();
+			    }
+			    else if (choice.equals("4")) {
 			        break;           
 			    }
 			}
@@ -110,6 +116,7 @@ public class Requester{
 	    }
 	}
 	
+	//handles choice of login
 	private void loginUser() {
 	    System.out.print("Email: ");
 	    String email = input.nextLine();
@@ -128,6 +135,35 @@ public class Requester{
 	        e.printStackTrace();
 	    }
 	}
+	
+	
+	private void createRecord() {
+	    System.out.println("Select Record Type:");
+	    System.out.println("1. New Book Entry");
+	    System.out.println("2. Borrow Request");
+	    System.out.print("Enter choice: ");
+
+	    String typeChoice = input.nextLine();
+
+	    if (!typeChoice.equals("1") && !typeChoice.equals("2")) {
+	        System.out.println("Invalid choice!");
+	        return;
+	    }
+
+	    System.out.print("Your Student ID: ");
+	    String studentId = input.nextLine();
+
+	    // Send record creation request
+	    sendMessage("CREATE_RECORD|" + typeChoice + "|" + studentId);
+
+	    try {
+	        String response = (String) in.readObject();
+	        System.out.println("server> " + response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 
 

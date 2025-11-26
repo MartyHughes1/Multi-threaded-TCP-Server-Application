@@ -6,6 +6,9 @@ public class Provider
 {
 	//list of all users
 	public static List<User> users = new ArrayList<>();
+	//list of library record
+	public static List<LibraryRecord> records = new ArrayList<>();
+
 	private ServerSocket providerSocket;
 	private Socket connection = null;
 	
