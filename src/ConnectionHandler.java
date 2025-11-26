@@ -142,7 +142,6 @@ public class ConnectionHandler extends Thread {
 
 	private void handleCreateRecord(String[] parts) {
 
-		// Expected format:
 		// CREATE_RECORD|recordType|studentId
 
 		if (parts.length != 3) {
